@@ -1,7 +1,7 @@
 # k8s-demo
 To run this demo, first start minicube (note the port command.. see the following for more info:https://stackoverflow.com/questions/71384252/cannot-access-deployed-services-when-minikube-cluster-is-installed-in-wsl2)
 ```
-minikube start --ports 127.0.0.1:30100:30100
+minikube start --ports 127.0.0.1:30100:30100 --ports 127.0.0.1:30400:30400
 ```
 
 ## BUILDING DOCKER CONTAINERS
