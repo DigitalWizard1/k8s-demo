@@ -4,7 +4,7 @@ To run this demo, first start minicube (note the port command.. see the followin
 minikube start --ports 127.0.0.1:30100:30100
 ```
 
-BUILDING DOCKER CONTAINERS
+##BUILDING DOCKER CONTAINERS
 When building a container, the following command must be run after the minikube is up and before running the docker build command:
 ```
 eval $(minikube docker-env)
