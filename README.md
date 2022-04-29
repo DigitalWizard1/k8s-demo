@@ -5,45 +5,45 @@ minikube start --ports 127.0.0.1:30100:30100
 ```
 Then, run the following commands to apply the various yaml files:
 ```
-    kubectl apply -f mongo-config.yaml
-    kubectl apply -f mongo-secret.yaml
-    kubectl apply -f mongo.yaml
-    kubectl apply -f webapp.yaml
+kubectl apply -f mongo-config.yaml
+kubectl apply -f mongo-secret.yaml
+kubectl apply -f mongo.yaml
+kubectl apply -f webapp.yaml
 ```
 This command will show all the pods that are running
 ```
-    kubectl get all
+kubectl get all
 ```
 This command will show the configmap and secrets
 ```
-    kubectl get configmap
-    kubectl get secret
+kubectl get configmap
+kubectl get secret
 ```
 This commands will show the status of the services:
 ```
-    kubectl describe service webapp-service
+kubectl describe service webapp-service
 ```
 ..and the staus of a pod
 ```
-    kubectl describe pod webapp-deployment-56dbf5d695-g7nm4
+kubectl describe pod webapp-deployment-56dbf5d695-g7nm4
 ```
 (note these names came from "kubectl get all")
 
 here's a command to list all the pods
 ```
-    kubectl get pod
+kubectl get pod
 ```
 now, how to access our app from the browser?? Need to configure the service
 ```
-    kubectl get svc
+kubectl get svc
 ```
 need the IP address of the cluster node, use
 ```
-    minikube ip
+minikube ip
 ```
 or using k8s
 ```
-    kubectl get node -o wide
+kubectl get node -o wide
 ```
 which will give us the IP address of the k8s cluster.
 
@@ -56,5 +56,5 @@ I updated the initial minikube start command to include the public facing port t
 
 If you can't access the NodePort service webapp with MinikubeIP:NodePort, execute the following command:
 ```
-    minikube service webapp-service
+minikube service webapp-service
 ```
