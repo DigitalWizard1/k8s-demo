@@ -11,7 +11,7 @@ eval $(minikube docker-env)
 ```
 This is necessary to push the docker images to minikube. see https://stackoverflow.com/questions/52310599/what-does-minikube-docker-env-mean
 
-
+## Adding pods to minikube
 
 Then, run the following commands to apply the various yaml files:
 ```
@@ -20,6 +20,8 @@ kubectl apply -f mongo-secret.yaml
 kubectl apply -f mongo.yaml
 kubectl apply -f webapp.yaml
 ```
+
+## viewing the status of the kube
 This command will show all the pods that are running
 ```
 kubectl get all
