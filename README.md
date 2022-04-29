@@ -61,6 +61,16 @@ which will give us the IP address of the k8s cluster.
 
 then we should be able to access the web service in the browser. for example 192.168.48.2:30100
 
+## Logs
+To view the logs, get the container ID  using this command...
+```
+kubectl get pod
+```
+...and use the following command
+```
+kubectl logs webapi-deployment-b8985dcb9-vj42r -f
+```
+
 Sidenote: I couldn't access it using wsl2. Looks like that's a known issue: https://stackoverflow.com/questions/71384252/cannot-access-deployed-services-when-minikube-cluster-is-installed-in-wsl2
 I updated the initial minikube start command to include the public facing port that the web server will use.
 
