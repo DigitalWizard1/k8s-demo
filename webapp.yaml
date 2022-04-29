@@ -1,0 +1,64 @@
+#deployment and service in one file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  # I believe this label is totally optional, <todo> should verify that by changing or removing it...
+  labels:
+    app: webapp
+spec:
+  # This defines how many pods we want to create using this blueprint
+  replicas: 3
+  # the selector will define which pods belong to which deployment
+  # This will match the pods with the label "webapp"
+  selector:
+    matchLabels:
+      app: webapp
+  # the template is the blueprint for the pods within the config of the deployment
+  template:
+    metadata:
+      # labels are used for identification purpuses, 
+      # each pod gets a unique name, but they can share a common label
+      labels:
+        app: webapp
+    spec:
+      #this is the list of containers contained in this pod. For this example, just using one container
+      containers:
+      - name: webapp
+        image: nanajanashia/k8s-demo-app:v1.0 #this is a simple node.js application
+        ports:
+        - containerPort: 3000
+        # NOTE: This image is setup to already expect the DB username and password as enviroment varibles 
+        env:
+        - name: USER_NAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: USER_PWD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+        - name: DB_URL
+          valueFrom:
+            configMapKeyRef:
+              name: mongo-config
+              key: mongo-url
+---
+#next will create a service
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service #this is the endpoint that we will use to access mongo, should match the URL defined in mongo-config.yaml
+spec:
+  # This tells K8s which pods belong to this service. Will "connect" this service to all the pods with the given selector name
+  
+  type: NodePort
+  selector:
+    app: webapp #needs to match the label of the pods that we want to connect to this service
+  ports:
+    - protocol: TCP
+      port: 3000 # this can be a different port
+      targetPort: 3000 #the target port should always match the containerPort (see screenshot)
+      nodePort: 30100

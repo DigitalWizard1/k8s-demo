@@ -1,0 +1,65 @@
+#deployment and service in one file
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-deployment
+  # I believe this label is totally optional, <todo> should verify that by changing or removing it...
+  labels:
+    app: mongo
+spec:
+  # This defines how many pods we want to create using this blueprint
+  # Since this is a database, we will set it to 1.
+  # If we want multiple redundent db pods, we should use a statefull set and not a "Deployment"
+  replicas: 3
+  # the selector will define which pods belong to which deployment
+  # This will match the pods with the label "mongo"
+  selector:
+    matchLabels:
+      app: mongo
+  # the template is the blueprint for the pods within the config of the deployment
+  template:
+    metadata:
+      # labels are used for identification purpuses, 
+      # each pod gets a unique name, but they can share a common label
+      labels:
+        app: mongo
+    spec:
+      #this is the list of containers contained in this pod. For this example, just using one container
+      containers:
+      - name: mongodb
+        image: mongo:5.0 #this is the image that we will use in this pod
+        ports:
+        - containerPort: 27017
+        # Next, will need to set the username and the password for the database.
+        # from mongo docker image documentation (https://hub.docker.com/_/mongo):
+        #   ...
+        #   environment:
+        #   MONGO_INITDB_ROOT_USERNAME: root
+        #   MONGO_INITDB_ROOT_PASSWORD: example
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-user
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: mongo-password
+
+
+---
+#next will create a service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo-service #this is the endpoint that we will use to access mongo, should match the URL defined in mongo-config.yaml
+spec:
+  # This tells K8s which pods belong to this service. Will "connect" this service to all the pods with the given selector name
+  selector:
+    app: mongo #needs to match the label of the pods that we want to connect to this service
+  ports:
+    - protocol: TCP
+      port: 27017 # this can be a different port
+      targetPort: 27017 #the target port should always match the containerPort (see screenshot)
