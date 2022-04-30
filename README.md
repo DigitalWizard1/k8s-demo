@@ -83,4 +83,6 @@ minikube service webapp-service
 
 # BREAK IN CASE OF EMERGENCY
 If things go to hell (like they just did), run this:
-> minikube delete --all
+```
+minikube delete --all
+```
