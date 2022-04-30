@@ -80,3 +80,7 @@ If you can't access the NodePort service webapp with MinikubeIP:NodePort, execut
 ```
 minikube service webapp-service
 ```
+
+# BREAK IN CASE OF EMERGENCY
+If things go to hell (like they just did), run this:
+> minikube delete --all
